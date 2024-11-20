@@ -1,0 +1,75 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+// Definition for singly-linked list.
+struct ListNode {
+    int val;
+    struct ListNode* next;
+};
+
+// Function to remove elements with a given value from the list
+struct ListNode* removeElements(struct ListNode* head, int val) {
+    // Create a dummy node to handle edge cases (e.g., removing the head)
+    struct ListNode* dummy = (struct ListNode*)malloc(sizeof(struct ListNode));
+    dummy->val = 0;
+    dummy->next = head;
+
+    struct ListNode* current = dummy;
+    while (current->next != NULL) {
+        if (current->next->val == val) {
+            // Remove the node
+            struct ListNode* temp = current->next;
+            current->next = current->next->next;
+            free(temp);  // Free the memory of the removed node
+        } else {
+            current = current->next;  // Move to the next node
+        }
+    }
+
+    // Update the head to the new list
+    head = dummy->next;
+    free(dummy);  // Free the dummy node
+    return head;
+}
+
+// Helper function to create a new node
+struct ListNode* createNode(int val) {
+    struct ListNode* newNode = (struct ListNode*)malloc(sizeof(struct ListNode));
+    newNode->val = val;
+    newNode->next = NULL;
+    return newNode;
+}
+
+// Helper function to print the linked list
+void printList(struct ListNode* head) {
+    while (head != NULL) {
+        printf("%d -> ", head->val);
+        head = head->next;
+    }
+    printf("NULL\n");
+}
+
+// Main function to test the removeElements function
+int main() {
+    // Creating a sample linked list: 1 -> 2 -> 6 -> 3 -> 4 -> 5 -> 6 -> NULL
+    struct ListNode* head = createNode(1);
+    head->next = createNode(2);
+    head->next->next = createNode(6);
+    head->next->next->next = createNode(3);
+    head->next->next->next->next = createNode(4);
+    head->next->next->next->next->next = createNode(5);
+    head->next->next->next->next->next->next = createNode(6);
+
+    // Print the original list
+    printf("Original List: ");
+    printList(head);
+
+    // Remove all nodes with value 6
+    head = removeElements(head, 6);
+
+    // Print the modified list
+    printf("List After Removing 6: ");
+    printList(head);
+
+    return 0;
+}
