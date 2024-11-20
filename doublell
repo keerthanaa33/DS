@@ -1,0 +1,146 @@
+
+#include <stdio.h>
+#include <stdlib.h>
+
+struct node {
+    int value;
+    struct node *next;
+    struct node *prev;
+};
+typedef struct node *NODE;
+
+NODE getnode() {
+    NODE ptr;
+    ptr = (NODE)malloc(sizeof(struct node));
+    if (ptr == NULL) {
+        printf("Memory is not allocated");
+        return NULL;
+    }
+    return ptr;
+}
+NODE insert_beg(NODE first, int item) {
+    NODE new;
+    new = getnode();
+    new->value = item;
+    new->next = NULL;
+    if (first == NULL) {
+        return new;
+    }
+    new->next = first;
+    return new;
+}
+
+NODE insert_pos(NODE first,int item,int pos)
+{
+
+    int count=1;
+    NODE current,new;
+    new->value = item;
+    new->prev = NULL;
+    new->next = NULL;
+    current=first;
+    if(first==NULL && pos==1)
+        return new;
+    while(count!=pos && current->next!=NULL)
+    {
+
+        current=current->next;
+        count++;
+    }
+    if(count==pos){
+        (current->prev)->next=new;
+        new->prev=current->prev;
+        new->next=current;
+        current->prev=new;
+        return first;
+    }
+    else
+    {
+
+        printf("position not found");
+        return first;
+    }
+}
+NODE delete_pos(NODE first,int pos)
+{
+
+    int count=1;
+    NODE current;
+    current=first;
+    if(first==NULL)
+        printf("Empty");
+    while(count!=pos && current->next!=NULL){
+        current=current->next;
+        count++;
+
+    }
+    if(count==pos)
+    {
+
+        (current->prev)->next=current->next;
+        (current->next)->prev=current->prev;
+        free(current);
+        return first;
+    }
+    else{
+        printf("position not found");
+        return first;
+    }
+}
+void display(NODE first) {
+    NODE temp;
+    if (first == NULL) {
+        printf("Linked list is empty\n");
+        return;
+    }
+    temp = first;
+    while (temp != NULL) {
+        printf("%d \t", temp->value);
+        temp = temp->next;
+    }
+    printf("NULL\n");
+}
+
+
+
+int main() {
+    NODE first;
+    first= NULL;
+    int choice,item,pos;
+    while (1) {
+
+        printf("1. Insert\n");
+        printf("2. Delete\n");
+        printf("3. Display\n");
+        printf("4.Insert at beg\n");
+        printf("Enter your choice : ");
+        scanf("%d",&choice);
+        switch(choice)
+        {
+             case 1:
+                printf("Enter the value to be inserted: ");
+                scanf("%d", &item);
+                printf("Enter the position");
+                scanf("%d",&pos);
+                first=insert_pos(first,item,pos);
+                break;
+             case 2:
+                printf("ENter the position");
+                first = delete_pos(first, pos);
+                break;
+
+            case 3:
+                display(first);
+                break;
+            case 4:
+                printf("ENter the value");
+                scanf("%d",&item);
+                first=insert_beg(first, item);
+                break;
+            default:
+                printf("Enter a valid choice\n");
+                break;
+        }
+    }
+    return 0;
+}
