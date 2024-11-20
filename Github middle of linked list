@@ -1,0 +1,61 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+// Definition for singly-linked list.
+struct ListNode {
+    int val;
+    struct ListNode* next;
+};
+
+// Function to find the middle of the linked list
+struct ListNode* middleNode(struct ListNode* head) {
+    struct ListNode* slow = head;
+    struct ListNode* fast = head;
+
+    // Traverse the list
+    while (fast != NULL && fast->next != NULL) {
+        slow = slow->next;        // Move slow pointer by 1 step
+        fast = fast->next->next;  // Move fast pointer by 2 steps
+    }
+
+    return slow; // Slow pointer will be at the middle
+}
+
+// Helper function to create a new node
+struct ListNode* createNode(int val) {
+    struct ListNode* newNode = (struct ListNode*)malloc(sizeof(struct ListNode));
+    newNode->val = val;
+    newNode->next = NULL;
+    return newNode;
+}
+
+// Helper function to print the linked list
+void printList(struct ListNode* head) {
+    while (head != NULL) {
+        printf("%d -> ", head->val);
+        head = head->next;
+    }
+    printf("NULL\n");
+}
+
+// Main function to test the middleNode function
+int main() {
+    // Creating a sample linked list: 1 -> 2 -> 3 -> 4 -> 5 -> NULL
+    struct ListNode* head = createNode(1);
+    head->next = createNode(2);
+    head->next->next = createNode(3);
+    head->next->next->next = createNode(4);
+    head->next->next->next->next = createNode(5);
+
+    // Print the original list
+    printf("Original List: ");
+    printList(head);
+
+    // Find the middle node
+    struct ListNode* middle = middleNode(head);
+
+    // Print the value of the middle node
+    printf("Middle Node Value: %d\n", middle->val);
+
+    return 0;
+}
